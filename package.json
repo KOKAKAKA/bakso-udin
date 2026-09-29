@@ -2,6 +2,13 @@
   "name": "bakso-udin",
   "version": "1.0.0",
   "private": true,
+  "scripts": {
+    "setup": "npx cap add android && python3 scripts/apply-icon.py && npx cap sync android",
+    "sync": "npx cap sync android",
+    "open": "npx cap open android",
+    "apk": "npx cap sync android && cd android && ./gradlew assembleDebug",
+    "icon": "python3 scripts/apply-icon.py"
+  },
   "dependencies": {
     "@capacitor/android": "^7.0.0",
     "@capacitor/core": "^7.0.0"
