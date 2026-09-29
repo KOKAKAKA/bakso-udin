@@ -9,21 +9,43 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - name: Ambil kode
+        uses: actions/checkout@v4
+
+      - name: Pasang Node.js
+        uses: actions/setup-node@v4
         with:
           node-version: 22
-      - uses: actions/setup-java@v4
+
+      - name: Pasang JDK 21
+        uses: actions/setup-java@v4
         with:
           distribution: temurin
           java-version: 21
-      - run: npm install --no-audit --no-fund
-      - run: npx cap add android
-      - run: npx cap sync android
+
+      - name: Pasang dependensi
+        run: npm install --no-audit --no-fund
+
+      - name: Buat project Android
+        run: npx cap add android
+
+      - name: Pasang ikon Udin
+        run: |
+          pip install pillow
+          python3 scripts/apply-icon.py
+
+      - name: Sinkron web ke Android
+        run: npx cap sync android
+
       - name: Build APK
         working-directory: android
         run: ./gradlew assembleDebug
-      - uses: actions/upload-artifact@v4
+
+      - name: Ganti nama APK jadi bakso-udin.apk
+        run: cp android/app/build/outputs/apk/debug/app-debug.apk bakso-udin.apk
+
+      - name: Simpan APK
+        uses: actions/upload-artifact@v4
         with:
-          name: bakso-udin-apk
-          path: android/app/build/outputs/apk/debug/app-debug.apk
+          name: bakso-udin
+          path: bakso-udin.apk
